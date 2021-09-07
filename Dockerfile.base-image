@@ -6,3 +6,4 @@ RUN add-apt-repository ppa:plt/racket -y
 RUN apt-get install -y racket xvfb
 RUN apt-get clean
 RUN raco setup --doc-index --force-user-docs
+RUN raco pkg install -i --auto rackunit-abbrevs rebellion minikanren-ee sugar
