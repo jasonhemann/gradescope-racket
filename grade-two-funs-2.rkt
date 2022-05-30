@@ -2,7 +2,9 @@
 
 (require rackunit) ;; WARNING: Use the test- forms, NOT the check- forms!
 
-(require "lib-grade.rkt")
+(require
+ racket/hash
+ "lib-grade.rkt")
 
 (define-var add-one from "code.rkt")
 (define-var sub-one from "code.rkt")
@@ -21,4 +23,13 @@
     (test-equal? "-1 1" (sub-one 1) 0)
     (test-equal? "-1 0" (sub-one 0) -1))))
 
-(generate-results tests)
+(define test-results-hash (generate-results/hash tests))
+
+(produce-report/exit
+ (hash-union
+  test-results-hash
+  #hasheq((output . "Some additional output\n"))
+  #:combine/key (lambda (k v1 v2)
+                  (cond
+                    [(eq? k 'output)
+                     (string-append v1 v2)]))))
